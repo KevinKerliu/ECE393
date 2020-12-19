@@ -1,0 +1,87 @@
+download xwindow using: https://mobaxterm.mobatek.net/download-home-edition.html
+
+this allows us to access grc at the node level through the console to appear on our computer, xming was missing the component where the console allows grc through to show on our screen, the interface from the node has to go through the console to our screen it doesnt directly got to out screen
+
+extract the mobaxterm files into a folder and open the application
+
+create a new session for whatever sb or grid 
+> session 
+> ssh 
+- remotehost: sb3.orbit-lab.org
+- specify username: KevinKerliu
+> advanced ssh settings
+- x11 forwarding checked
+- use private key (upload key file)
+
+a terminal opens and now we enter our passcode and we are on sb3
+- do the regular turning off load image then turn on 
+
+now lets start a new session to tunnel through console from node to out computer
+>session
+>>ssh
+-remosthost: node1-1.sb3.orbit-lab.org
+-specify username: root
+>>>advanced ssh settings
+-x11 forwarding is enabled
+>>>network settings
+-click on the image labeled ssh gateway(jump host)
+-gateway host: console.sb3.orbit-lab.org
+-username:KevinKerliu
+-use SSH key (upload private key)
+
+-----in node1-1 terminal------
+another terminal will open and now we can access gnu-radio!
+in the node1-1 terminal, type gnuradio-companion to access grc interface
+
+to get examples of gnudraio while at root of node1-1: cd /usr/local/share/gnuradio/examples/
+
+just cd to go back to root 
+
+to save files and then close node do these two commands
+- more [file name such as prepare.sh]
+- ./[filename]
+- poweroff
+
+-----in console terminal------
+to save image on node run this command
+- omf save -n node1-1.sb3.orbit-lab.org
+*watch out for errors in the saving message
+
+now to access the saved image do these commands
+- cd / (arrive at KevinKerliu@console:/)
+- cd export
+- cd omf-images-5.4/
+- ls (to see all images saved from anyone)
+- (or run) ls Kevin* (to find all images that start with Kevin)
+- (or run) ls -ltr (to find images listed with file info such as read/write access/, owner name, group name,file size,date, filename in reverse time order)
+-(or run) ls -ltr K* (cobmine the above)
+
+to change image name
+- mv [filename] [newfilename]
+
+to remove file
+- rm [filename]
+
+to create empty file
+- touch [filename]
+
+to change rm to rm -i 
+- cd (to go to KevinKerliu@console:~)
+- ls -la (to find .bashrc file in list of hidden files which start with '.')
+- nano .bashrc (to create .bashrc file if there is none)
+> alias rm = 'rm -i'
+- source .bashrc
+now if you run rm, rm -i is run instead (in the console not the nodes since this file is at the console level)
+
+to run shell code on nodes at console level
+- ssh root@node1-2 ls /
+-(or run) ssh root@node1-2
+
+to copy file with a new name
+- scp root@node1-2:/root/prepare.sh [newfilename]
+
+after we run an experiment and results are in a file we need to use the data so that is done one way by moving the file to our computer and using mobaxterm we can drag the file from the left panel
+
+extra notes
+use the tab key to finish a command or at least list the possible commands given the initial letters
+
